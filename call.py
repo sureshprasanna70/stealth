@@ -23,7 +23,7 @@ def main():
         for i in t:
             s+=i
         multipie_chart.add(s,n)
-    multipie_chart.render_to_png(filename='bar_chart.png')
+    multipie_chart.render_to_png(filename='pie_chart.png')
     html=multipie_chart.render();
     f=open('graph.html','w')
     f.write(html)
