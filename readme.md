@@ -9,7 +9,7 @@
       *cairosvg*
       *tinycss*
   </pre>
-  *Run python call.py*
-  *A html file(graph.html) and a png file(pie_graph.png) with chart can be seen as output in the directory*
+  *Run python call.py*<br>
+  *A html file(graph.html) and a png file(pie_graph.png) with chart can be seen as output in the directory*<br>
 
 
