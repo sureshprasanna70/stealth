@@ -2,13 +2,63 @@ import socket
 import requests
 import re
 import json
+from collections import Counter
+import pygal
 def main():
     filename="domains"
     contents=fileread(filename)
-    sites = re.findall("^g.*",contents,re.MULTILINE)
-     #ips=findips(sites)
-    ips={'girlsofdesire.org': '91.83.236.88', 'goodadvertising.info': 'nil', 'getiton.com': '208.88.182.181', 'gappon.com': '66.228.122.170', 'gayadnetwork.com': '208.113.199.38', 'gestionpub.com': '37.187.155.197', 'gannett.gcion.com': '159.54.227.221', 'gan.doubleclick.net': '74.125.204.149', 'g-cash.biz': '67.43.170.104', 'girlfriendvideos.com': '64.59.114.142', 'googleadservicepixel.com': 'nil', 'gamesbannerexchange.com': '79.170.40.37', 'ganja.com': '83.149.78.21', 'gayadpros.com': '208.99.71.6', 'gretzalz.com': '104.28.1.16', 'genericlink.com': '66.254.125.89', 'guim.co.uk': '54.171.162.158', 'gaynz.com': '119.47.125.57', 'grandparents.com': '66.216.67.15', 'glbtrk.com': '50.57.3.245', 'gowilkes.com': '184.173.178.60', 'gripdownload.co': '162.159.246.209', 'getfoxyproxy.org': '198.74.62.72', 'globaltakeoff.net': '108.171.187.29', 'grafpedia.com': '96.30.4.203', 'gcnlive.com': '74.202.111.230', 'gumgum.com': '184.73.213.155', 'gateprep.com': '69.172.201.208', 'gtweekly.com': '109.199.103.165', 'googlesyndication.com': '74.125.130.99', 'ghafla.co.ke': '198.57.206.248', 'gadget.co.za': '41.0.5.180', 'geovisite.com': '91.121.78.203', 'glical.com': 'nil', 'gentoo.org': '89.16.167.134', 'getoffmyinternets.net': '67.225.228.21', 'giantsavings-a.akamaihd.net': '124.124.252.25', 'go2euroshop.com': 'nil', 'gemineering.com': '209.222.14.3', 'gotoplaymillion.com': '149.126.72.19', 'goallurl.ru': '31.170.179.179', 'game-clicks.com': '104.28.5.120', 'guardiannewsngr.com': '104.28.21.120', 'garvmedia.com': 'nil', 'gamemakerblog.com': '50.116.18.239', 'gomtv.net': '183.110.10.205', 'groovinads.com': '50.30.35.172', 'gamehotus.com': 'nil', 'getthislistbuildingvideo.biz': 'nil', 'gl-cash.com': '69.55.56.106', 'giftguide.savannahnow.com': '216.116.229.138', 'gopjn.com': '199.241.233.141', 'gunzblazingpromo.com': '74.206.224.229', 'geo.cliphunter.com': '99.192.226.241', 'go2speed.org': 'nil', 'games.bigfishgames.com': '208.77.152.143', 'goember.com': '173.255.219.170', 'getnzb.com': '85.17.75.214', 'gtop100.com': '64.32.29.2', 'gridlockparadise.com': 'nil', 'global-success-club.net': 'nil', 'geo-idm.fr': 'nil', 'gamersaloon.com': '72.32.155.64', 'galleries-pornstar.com': '162.251.110.212', 'ggwcash.com': '184.154.123.76', 'giantrealm.com': '54.210.204.217', 'getpaidforyourtime.org': '198.57.242.109', 'gaynz.gen.nz': '219.88.240.130', 'gandrad.org': '50.23.134.226', 'gmads.net': '95.131.121.65', 'gsprating.com': '104.28.30.94', 'gfxa.sheetmusicplus.com': '54.230.190.197', 'gorgonprojectinvest.com': 'nil', 'gooster.co.uk': '213.41.41.28', 'gaeatimes.com': '69.65.60.140', 'gfhdkse.com': 'nil', 'gpacalculatorhighschoolfree.com': '67.222.12.140', 'gameads.com': '72.52.94.199', 'gbatemp.net': '62.210.177.121', 'gloryholegirlz.com': '85.17.22.83', 'gokunming.com': '180.235.134.28', 'gomlab.com': '54.172.91.64', 'geobanner.adultfriendfinder.com': '208.88.176.7', 'garrysmod.org': '104.28.19.44', 'grllopa.com': '206.190.151.63', 'ganool.com': '5.9.17.107', 'geobanner.socialflirt.com': '208.88.176.7', 'game1games.com': '54.183.254.253', 'gayporntimes.com': '204.15.254.130', 'getscorecash.com': '69.164.25.116', 'goldenskate.com': '199.193.245.89', 'geobanner.blacksexmatch.com': '208.88.176.7', 'graduateinjapan.com': '72.47.244.114', 'greatgirlsgames.com': '74.82.53.73', 'gbrej.com': 'nil', 'gamezadvisor.com': 'nil', 'greystripe.com': '64.156.167.84', 'gfx.infomine.com': '119.31.249.3', 'ggncpm.com': '141.8.225.73', 'googleusercontent.com': 'nil', 'gourmetads.com': '198.61.236.77', 'gscontxt.net': 'nil', 'gaydarradio.com': '54.77.86.124', 'goldmoney.com': '162.159.253.72', 'googleads.g.doubleclick.net': '74.125.130.157', 'gscsystemwithdarren.com': 'nil', 'geld-internet-verdienen.net': '64.74.223.45', 'greenlabelppc.com': '67.196.2.170', 'gameknot.com': '216.218.132.82', 'galleries.videosz.com': '207.66.182.16', 'guzzle.co.za': '197.189.236.234', 'gambling-affiliation.com': '91.198.105.142', 'get-a-fuck-tonight.com': '178.33.44.111', 'greenads.org': '174.123.132.242', 'gold-prices.biz': '65.39.205.54', 'gamersbanner.com': '185.53.177.10', 'greatbranddeals.com': '74.200.250.138', 'go4up.com': '62.210.141.36', 'gamingsquid.com': '192.252.215.199', 'geocities.com': '98.137.201.117', 'gold1013fm.com': '205.178.152.155', 'goviral.hs.llnwd.net': 'nil', 'getrichslowly.org': '70.42.23.124', 'grabo.bg': '193.107.38.49', 'gayxperience.com': '91.226.182.243', 'guardian.bz': '208.91.198.52', 'gamesofdesire.com': '174.142.104.83', 'gogoplexer.com': '104.28.25.91', 'gamblingwages.com': '184.107.234.131', 'gratisnetwork.com': '69.172.201.208', 'geobanner.sexfinder.com': '208.88.176.7', 'gunpartners.com': '50.28.63.199', 'game-advertising-online.com': '75.126.175.248', 'globaltimes.cn': '123.103.23.109', 'gagacon.com': '88.85.93.34', 'gettipsz.info': '69.13.255.46', 'geoaddicted.net': '87.250.141.209', 'graphic.com.gh': '67.212.168.154', 'gledaisport.com': '162.255.119.254', 'gofindmedia.net': '64.79.65.70', 'get.2leep.com': '192.240.110.178', 'ghananewsagency.org': '206.217.192.163', 'ge.tt': '54.195.252.180', 'gals4free.net': '208.99.82.246', 'gate-ru.com': 'nil', 'grammar-monster.com': '69.90.25.73', 'gonzagamer.com': 'nil', 'gina-lynn.net': '104.28.7.46', 'gamesgames.com': '212.72.60.197', 'gameads.digyourowngrave.com': '54.231.97.0', 'gklmedia.com': 'nil', 'glocktalk.com': '207.58.187.162', 'googletagservices.com': 'nil', 'green.virtual-nights.com': '83.220.129.152', 'geoinventory.com': '184.168.221.58', 'gabzfm.com': '69.195.124.145', 'galeriaseroticas.xpg.com.br': '187.17.123.240', 'girlsintube.com': '192.254.187.108', 'geopromos.com': '82.223.246.14', 'golderotica.com': '109.206.167.32', 'geobanner.passion.com': '208.88.176.7', 'gururevenue.com': 'nil', 'gtsads.com': '64.59.78.70', 'get.slotocash.com': '190.4.93.5', 'glam.com': '216.121.21.115', 'gimiclub.com': '212.6.182.180', 'getgscfree.com': 'nil', 'globalsuccessclub.com': 'nil', 'govereign.com': '88.85.93.34', 'giffgaff.com': '95.138.157.240', 'get.box24casino.com': 'nil', 'grocotts.co.za': '197.242.150.207', 'goviral-content.com': 'nil', 'gaytube.com': '94.199.252.56', 'gagenez.com': '88.85.93.34', 'gammasites.com': '66.152.76.214', 'globalprocash.com': 'nil', 'greyorgray.com': '74.220.219.57', 'gwallet.com': '72.5.64.18', 'gateway-banner.eravage.com': '178.170.93.18', 'gamesports.net': '54.165.125.236', 'gasgoo.com': '69.28.51.244', 'gawkerassets.com': '69.60.7.199', 'gaccwest.com': '80.237.176.168', 'greenoptimistic.com': '104.236.15.231', 'go2media.org': 'nil', 'geek2us.net': '108.170.34.10', 'glassdoor.com': '190.93.245.224', 'gothot.org': 'nil', 'gsniper.com': '134.213.78.150', 'grammar.coursekey.com': '72.32.147.165', 'gruntig2008.opendrive.com': '38.99.81.98', 'gojoingscnow.com': 'nil', 'goodgearguide.com.au': '54.252.106.65', 'glamour.cz': '88.86.120.81', 'gethopper.com': '8.5.1.47', 'geobanner.alt.com': '208.88.176.7', 'groupcommerce.com': '174.129.221.208', 'goklics.ru': 'nil', 'goo.gl': '74.125.68.102', 'go2cdn.org': 'nil', 'gainmoneyfast.com': '66.172.27.211', 'gameorc.net': '192.69.198.234', 'gsniper2.com': '209.59.146.235', 'geometria.tv': '212.192.228.126', 'gwinnettdailypost.com': '208.91.60.6', 'globalsecurity.org': '161.58.88.193', 'go2cloud.org': '54.67.100.54', 'genericsteps.com': '162.159.242.123', 'globaladv.net': '94.75.229.6', 'geoshopping.nzherald.co.nz': '184.154.158.58', 'gamecetera.com': '64.38.233.74', 'groupon.com': '104.71.146.65', 'giantaffiliates.com': '188.65.116.241', 'gulf-daily-news.com': '64.226.254.51', 'girls-home-alone.com': '216.150.68.101', 'guitaralliance.com': '69.5.13.240', 'gx101.com': '192.155.48.93', 'geobanner.fuckbookhookups.com': '208.88.176.7', 'gelbooru.com': '5.178.68.100', 'getprice.com.au': '125.7.42.221', 'gamersad.com': '173.214.173.130', 'gadgetresearch.net': 'nil', 'goodadvert.ru': '93.191.11.124', 'goldporntube.com': '209.239.175.242', 'geobanner.friendfinder.com': '208.88.176.7', 'gameduell.com': '213.95.176.69', 'g726n8cy.com': '190.93.246.14', 'gatikus.com': '88.85.93.121', 'gospel1190.net': '23.91.112.4', 'go2jump.org': '54.241.181.129', 'gaccsouth.com': '80.237.176.143', 'gamecopyworld.com': '176.9.47.25', 'gapeandfist.com': '185.66.9.205', 'gateway.fortunelounge.com': '193.169.206.148', 'graphics.pop6.com': '72.21.91.103', 'gamingjobsonline.com': '198.154.205.29', 'graboid.com': '98.129.132.148', 'gotupload.com': 'nil', 'ghacks.net': '96.30.22.116', 'gfrevenge.com': '208.78.94.72', 'grannysexforum.com': '81.171.38.165', 'greaterkashmir.com': '88.208.249.109', 'goauto.com.au': '103.29.173.140', 'girlguides.co.za': '41.76.106.51', 'gaccny.com': '80.237.190.77', 'ganardineroreal.com': '97.74.144.85', 'g4whisperermedia.com': '74.208.45.120', 'g.brothersoft.com': '184.172.2.121', 'genialradio.com': '74.200.250.138', 'greatdeals.co.ke': '192.163.215.168', 'getadblock.com': '192.96.204.18', 'gratuit.niloo.fr': '87.98.166.118', 'geo.connexionsecure.com': '66.155.97.97', 'globaladsales.com': '72.167.232.191', 'gamevid.com': '107.20.201.232', 'getreading.co.uk': '176.34.106.222', 'getgamers.eu': '178.63.30.127', 'gagthebitch.com': '95.211.180.87', 'gold4rs.com': 'nil', 'gaccmidwest.org': '80.237.176.163', 'grapeshot.co.uk': '89.145.95.3', 'gamerant.com': '199.19.78.237', 'glowdot.com': '208.113.145.188', 'globalinteractive.com': '72.52.4.120', 'gotgayporn.com': '209.239.169.225', 'galleyn.com': '88.85.93.35', 'governmenttrainingexchange.com': '67.192.164.7', 'g05.info': '216.178.47.61', 'guardiandigitalcomparison.co.uk': 'nil', 'genesismedia.com': '23.23.173.178', 'gamesfreez.com': '162.250.145.181', 'grabmyads.com': '69.172.201.208', 'get.rubyroyal.com': '164.177.152.219'}
-    findgeoloc(ips,sites)
+    sites = re.findall(r"^g.*",contents,re.MULTILINE)
+    #ips=findips(sites)
+    ips=['67.43.170.104', '74.208.45.120', '88.85.93.121', '88.85.93.101','66.172.33.209', '88.85.93.120', '91.198.105.142', '75.126.175.248','104.28.5.120', '72.52.94.199', '64.38.233.74', 'nil','173.214.173.130', '54.72.9.51', '79.170.40.37', '173.194.127.60','50.23.134.226', '159.54.227.221', 'nil', 'nil', '88.85.93.35','208.113.199.38', '108.170.34.10', '64.74.223.45', '209.222.14.3','66.254.125.89', '162.159.241.123', '23.23.173.178', 'nil','82.223.246.14', '91.121.78.203', '37.187.155.197', '178.63.30.127','nil', '69.164.25.116', 'nil', '69.13.255.46', '141.8.225.73','188.65.116.241', '212.6.182.180', 'nil', 'nil', 'nil','72.167.232.191', '94.75.229.6', '72.52.4.120', 'nil','108.171.187.29', '208.113.145.188', '95.131.121.65','54.84.65.145', 'nil', 'nil', '173.255.219.170', '104.28.24.91','nil', '93.191.11.124', 'nil', 'nil', 'nil', 'nil','199.241.233.141', '198.61.236.77', '67.192.164.7', 'nil', 'nil','67.222.12.140', '141.8.224.239', '193.107.38.49', '96.30.4.203','89.145.95.3', '141.8.224.239', '174.123.132.242', '67.196.2.170','104.28.1.16', '162.159.245.209', '206.190.135.101', '50.30.35.172','174.129.221.208', 'nil', 'nil', 'nil', '69.5.13.240','184.73.213.155', '50.28.63.199', 'nil', '72.5.64.18','192.155.48.93', '64.156.167.84', '216.178.47.61', '83.149.78.21','64.79.65.70', '173.194.127.57', '149.126.77.121', '74.200.250.138','209.59.146.235', '190.93.246.14', '97.74.144.85', '208.99.71.6','91.226.182.243', '74.200.250.138', '87.250.141.209','184.168.221.58', '208.88.182.181', 'nil', '184.154.123.76','69.55.56.106', '50.57.3.245', 'nil', '31.170.178.179', 'nil','109.206.167.32', '88.85.93.35', 'nil', '64.59.78.70','74.206.224.229', 'nil', 'nil', '184.107.234.131', '213.95.176.69','192.69.198.234', '72.32.155.64', '54.165.125.236','198.154.205.29', '193.169.206.148', '69.60.7.199','54.195.252.180', '66.155.97.97', '208.88.176.7', '208.88.176.7','192.240.110.178', 'nil', '164.177.152.219', '190.4.93.5','192.96.204.18', '74.200.250.181', '85.17.75.214', '198.57.242.109','54.230.190.187', '54.210.237.99', '124.124.40.10','95.138.157.240', '216.121.21.115', 'nil', '54.183.39.146', 'nil','162.159.254.71', '173.194.127.116', '173.194.127.48', 'nil','98.129.132.148', '72.47.244.114', '72.32.147.165', '184.27.22.175','134.213.78.150', '54.171.162.158', '41.185.22.250','95.211.180.87', '187.17.123.240', '207.66.182.16', '66.152.76.214','178.170.93.12', '99.192.226.241', '208.88.176.7', '208.88.176.7','208.88.176.7', '208.88.176.7', '208.88.176.7', '208.88.176.7','208.78.94.72', '216.150.68.101', 'nil', '72.21.91.103','178.33.44.111', '184.172.2.121', '69.195.124.145','80.237.176.163', '80.237.190.77', '80.237.176.143','80.237.176.168', '41.0.5.180', '69.65.60.140', '54.183.254.253','54.231.244.8', '176.9.47.25', '176.9.47.25', '216.218.132.82','50.116.18.239', '199.19.78.237', '208.77.152.143','162.250.145.181', '212.72.60.198', '107.20.201.232','192.252.215.199', '5.9.17.107', '66.228.122.170', '104.28.19.44','69.28.51.244', '69.172.201.208', '54.229.72.230', '119.47.125.57','219.88.240.130', '62.210.177.121', 'nil', '74.202.111.234','74.202.111.234', '5.178.68.100', '5.178.68.100', '5.178.68.100','89.16.167.134', '98.137.201.117', '212.192.228.126', '184.154.158.58','192.155.80.203', '67.225.228.21', '67.225.228.21', '125.7.42.221','176.34.106.222', '70.42.23.124', '37.29.0.148', '96.30.22.116','198.57.206.248', '198.57.206.248', '206.217.192.163', '216.116.229.138','41.76.106.51', '190.93.245.224', '162.255.119.254', '161.58.88.193','123.103.23.109', '207.58.187.162', '62.210.141.36', '62.210.141.36','62.210.141.36', '103.29.173.140', '180.235.134.28', '65.39.205.54','205.178.152.155', '205.178.152.155', '199.193.245.89', '54.172.91.64','183.110.10.205', 'nil', '173.194.127.33', '54.252.106.65', 'nil', 'nil','213.41.41.28', '23.91.112.4', 'nil', '184.173.178.60', '184.173.178.60','69.90.25.73', '66.216.67.15', '67.212.168.154', '192.163.215.168','88.208.249.109', '74.82.53.73', '74.82.53.73', '83.220.129.152','104.236.15.231', '74.220.219.57', '74.220.219.57', '197.242.150.207','38.99.81.99', '104.28.30.94', '64.32.29.2', '109.199.103.165','208.91.198.52', '104.28.21.120', '64.77.94.195', '208.91.60.6', 'nil','74.125.236.130', '87.98.166.118', '162.251.110.212', '208.99.82.246','174.142.104.83', '185.66.9.205', '204.15.254.130', '94.199.252.56','104.28.7.46', '64.59.114.142', '192.254.187.108', '91.83.236.88','91.83.236.88', '88.86.120.81', '85.17.22.83', '209.239.175.242','209.239.169.225', '81.171.38.165']
+    #geoloc=findgeoloc(ips)
+    geoloc=[u'US', u'US', u'NL', u'NL', u'US', u'NL', u'FR', u'US', u'US',
+            u'US', u'US', [], u'US', u'IE', u'GB', u'US', u'US', u'US', [], [],
+            u'NL', u'US', u'US', u'US', u'US', u'US', u'US', u'US', [], u'ES',
+            u'FR', u'FR', u'DE', [], u'US', [], u'US', u'CH', u'GB', u'DE', [],
+            [], [], u'US', u'NL', u'US', [], u'US', u'US', u'DE', u'US', [], [],
+            u'US', u'US', [], u'RU', [], [], [], [], u'US', u'US', u'US', [],
+            [], u'US', u'CH', u'BG', u'US', u'GB', u'CH', u'US', u'US', u'US',
+            u'US', u'US', u'US', u'US', [], [], [], u'US', u'US', u'US', [],
+            u'US', u'US', u'US', u'US', u'NL', u'US', u'US', u'GB', u'US',
+            u'US', u'CR', u'US', u'US', u'NL', u'US', u'NL', u'US', u'US', [],
+            u'US', u'US', u'US', [], u'CZ', [], u'EU', u'NL', [], u'US', u'US',
+            [], [], u'CA', u'DE', u'US', u'US', u'US', u'US', u'GB', u'US',
+            u'IE', u'US', u'US', u'US', u'US', [], u'GB', u'CR', u'US', u'US',
+            u'NL', u'US', u'US', u'US', u'IN', u'GB', u'US', [], u'US', [],
+            u'US', u'US', u'US', [], u'US', u'US', u'US', u'US', u'GB', u'IE',
+            u'ZA', u'NL', u'BR', u'US', u'CA', u'FR', u'US', u'US', u'US',
+            u'US', u'US', u'US', u'US', u'US', u'US', [], u'US', u'FR', u'US',
+            u'US', u'DE', u'DE', u'DE', u'DE', u'ZA', u'US', u'US', u'US',
+            u'DE', u'DE', u'US', u'US', u'US', u'US', u'US', u'GB', u'US',
+            u'US', u'DE', u'US', u'US', u'US', u'US', u'IE', u'NZ', u'NZ',
+            u'FR', [], u'US', u'US', u'NL', u'NL', u'NL', u'GB', u'US', u'RU',
+            u'US', u'US', u'US', u'US', u'AU', u'IE', u'US', u'RU', u'US',
+            u'US', u'US', u'US', u'US', u'ZA', u'US', u'US', u'US', u'CN',
+            u'US', u'FR', u'FR', u'FR', u'AU', u'HK', u'US', u'US', u'US',
+            u'US', u'US', u'KR', [], u'US', u'AU', [], [], u'GB', u'US', [],
+            u'US', u'US', u'CA', u'US', u'US', u'US', u'GB', u'US', u'US',
+            u'DE', u'US', u'US', u'US', u'ZA', u'US', u'US', u'US', u'BG',
+            u'US', u'US', u'US', u'US', [], u'US', u'FR', u'US', u'US', u'CA',
+            u'US', u'US', u'NL', u'US', u'US', u'US', u'HU', u'HU', u'CZ',
+            u'NL', u'US', u'US', u'NL']
+    split = [tuple(l) for l in geoloc]
+    counts = {}
+    s=""
+    multipie_chart = pygal.Pie()
+    multipie_chart.title = 'Demographic distribution of IPS '
+    for t in split:
+        counts[t] = 1 + counts.get(t, 0)
+    for t,n in counts.items():
+
+        s=""
+        for i in t:
+            s+=i
+        multipie_chart.add(s,n)
+    multipie_chart.render_to_png(filename='bar_chart.png')
+    html=multipie_chart.render();
+    f=open('graph.html','w')
+    f.write(html)
+    f.close()
 def fileread(filename):
     try:
         fileob=open(filename)
@@ -19,29 +69,31 @@ def fileread(filename):
         print str(e)
 
 def findips(sites):
-    ips={}
-    for site in sites:
+    ips=[[] for i in range(len(sites))]
+    for i in range(len(sites)):
         try:
-            print site
-            ips[site]=socket.gethostbyname(site)
+            print str(i)+" "+sites[i]
+            ips[i]=socket.gethostbyname(sites[i])
         except Exception,e:
-            ips[site]='nil'
+            ips[i]='nil'
+    print ips
     return ips 
-def findgeoloc(ips,sites):
-    countrycode={}
-    for site in sites:
+def findgeoloc(ips):
+    countrycode=[[] for i in range(len(ips))]
+    for i in range(len(ips)):
         try:
            url="http://telize.com/geoip/"
-           if ips[site] != "nil":
-              response=requests.get(url+ips[site])
+           if ips[i] != "nil":
+              response=requests.get(url+ips[i])
               stringjson=unicode(response.text)
               responsejson=json.loads(stringjson)
-              countrycode[site]=responsejson['country_code']
-              logstring=ips[site]+" "+responsejson["country_code"]
+              countrycode[i]=responsejson['country_code']
+              logstring=str(i)+" "+ips[i]+" "+responsejson["country_code"]
               print logstring
            else:
              print 'nil ip'
         except Exception,e:
+            print "exception"
             print str(e)
-    print countrycode
+    return countrycode
 main()
